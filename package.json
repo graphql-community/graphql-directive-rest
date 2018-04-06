@@ -1,0 +1,33 @@
+{
+  "name": "graphql-directive-rest",
+  "version": "0.0.0",
+  "description": "Graphql direvtive for easy integrate with REST API",
+  "main": "index.js",
+  "repository": "git@github.com:graphql-community/graphql-directive-rest.git",
+  "author": "Czysty <lukasz.czyszczonik@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon example/index.js",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "peerDependencies": {
+    "graphql": "^0.13.2",
+    "graphql-tools": "^2.23.1"
+  },
+  "dependencies": {
+    "lodash.get": "^4.4.2"
+  },
+  "devDependencies": {
+    "apollo-server-express": "^1.3.4",
+    "body-parser": "^1.18.2",
+    "eslint": "^4.19.1",
+    "eslint-config-callstack-io": "^1.1.1",
+    "express": "^4.16.3",
+    "graphql": "^0.13.2",
+    "graphql-tools": "^2.23.1",
+    "jest": "^22.4.3",
+    "nodemon": "^1.17.3",
+    "nock": "^9.2.3"
+  }
+}
