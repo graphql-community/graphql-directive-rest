@@ -7,8 +7,8 @@
 
 ## Introduction
 
-Graphql is often use to integrate with REST API.
-Using this directive you can made integration without creating any resolvers :tada: :open_mouth:
+GraphQL is often used to integrate applications with REST API.
+Using this directive allows you to make REST integrations without creating any resolvers :tada: :open_mouth:
 
 ## Table of Contents
 
@@ -132,9 +132,9 @@ or to get the gender: `"results[0].gender"`
 
 I would love to see your contribution. ❤️
 
-For local development (and testing) is all you have to do just yarn and then yarn dev. This will start the Apollo server and next you are ready to contributing :tada:
+For local development (and testing), all you have to do is to run `yarn` and then `yarn dev`. This will start the Apollo server and you are ready to contribute :tada:
 
-Run yarn test (try `--watch` flag) for unit tests (we using Jest)
+Run yarn test (try `--watch` flag) for unit tests (we are using Jest)
 
 ## LICENSE
 
