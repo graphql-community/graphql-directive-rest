@@ -1,6 +1,10 @@
 const { makeExecutableSchema } = require('graphql-tools');
 const restDirective = require('../index');
 
+const GITHUB_URL = 'https://api.github.com';
+const USER_URL = 'https://randomuser.me/api';
+const ADMIN_URL = 'https://yesno.wtf';
+
 const typeDefs = `
   type User {
     login: String
@@ -10,13 +14,13 @@ const typeDefs = `
   type Me {
     gender: String
     email: String
-    admin: String @rest(url: "https://yesno.wtf/api" extractFromResponse: "answer")
+    admin: String @rest(url: "${ADMIN_URL}/api" extractFromResponse: "answer")
   }
 
   type Query {
-    me(gender: String): Me @rest(url: "https://randomuser.me/api/?gender=$gender" extractFromResponse: "results[0]")
-    users: [User] @rest(url: "https://api.github.com/users")
-    user(user: String): User @rest(url: "https://api.github.com/users/$user")
+    me(gender: String): Me @rest(url: "${USER_URL}/?gender=$gender" extractFromResponse: "results[0]")
+    users: [User] @rest(url: "${GITHUB_URL}/users")
+    user(user: String): User @rest(url: "${GITHUB_URL}/users/$user")
   }
 `;
 
