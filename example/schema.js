@@ -22,7 +22,6 @@ const typeDefs = `
 
 module.exports = makeExecutableSchema({
   typeDefs,
-  undefined, // we don't need resolvers :) thanks for @rest directive!
   schemaDirectives: {
     rest: restDirective,
   },
