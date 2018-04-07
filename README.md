@@ -130,6 +130,8 @@ module.exports = makeExecutableSchema({
 });
 ```
 
+> Warning! Directive overwrites your resolvers if defined.
+
 ## Example queries:
 
 ```graphql
