@@ -5,12 +5,12 @@
 [![PRs Welcome][prs-badge]][prs]
 [![MIT License][license-badge]][build]
 
-## Introduction
+# Introduction
 
 GraphQL is often used to integrate applications with REST API.
 Using this directive allows you to make REST integrations without creating any resolvers :tada: :open_mouth:
 
-## Table of Contents
+# Table of Contents
 
 * [Introduction](#introduction)
 * [Installation](#installation)
@@ -19,7 +19,7 @@ Using this directive allows you to make REST integrations without creating any r
 * [Contributing](#contributing)
 * [LICENSE](#license)
 
-## Installation
+# Installation
 
 ```
 yarn add graphql-directive-rest
@@ -27,44 +27,116 @@ yarn add graphql-directive-rest
 
 _This package requires [graphql](https://www.npmjs.com/package/graphql) and [graphql-tools](https://www.npmjs.com/package/graphql-tools) as peer dependency_
 
-## Usage
+# Usage
 
-```javascript
-import { makeExecutableSchema } from 'graphql-tools';
-import restDirective from 'graphql-directive-rest';
-import typeDefs from './schema.graphql';
+## Standard approach, without the `@rest` directive
 
-export default makeExecutableSchema({
+```js
+const { makeExecutableSchema } = require('graphql-tools');
+const restDirective = require('../index');
+const fetch = require('node-fetch');
+
+const typeDefs = `
+  type User {
+    login: String
+    avatar_url: String
+  }
+
+  type Me {
+    gender: String
+    email: String
+    admin: String 
+  }
+
+  type Query {
+    me(gender: String): Me
+    users: [User]
+    user(user: String): User
+  }
+`;
+
+const resolvers = {
+  Query: {
+    me: (_, args) =>
+      fetch(`https://randomuser.me/api/?gender=${args.gender}`)
+        .then(res => res.json())
+        .then(data => data.results[0]),
+    users: () => fetch('https://api.github.com/users').then(res => res.json()),
+    user: (_, args) =>
+      fetch(`https://api.github.com/users/${args.user}`).then(res =>
+        res.json()
+      ),
+  },
+  Me: {
+    admin: () =>
+      fetch('https://yesno.wtf/api')
+        .then(res => res.json())
+        .then(data => data.answer),
+  },
+};
+
+module.exports = makeExecutableSchema({
   typeDefs,
-  undefined, // We don't need resolvers :O
+  resolvers,
+  schemaDirectives: {
+    rest: restDirective,
+  },
+});
+
+`;
+
+const resolvers
+
+module.exports = makeExecutableSchema({
+  typeDefs,
   schemaDirectives: {
     rest: restDirective,
   },
 });
 ```
 
-GraphQL schema:
+## Using `@rest` directive
 
-```graphql
-type User {
-  login: String
-  avatar_url: String
-}
+When using `@rest` directive, we don't need to write any resolvers :tada:
 
-type Me {
-  gender: String
-  email: String
-  admin: String @rest(url: "https://yesno.wtf/api", extractFromResponse: "answer")
-}
+```js
+const { makeExecutableSchema } = require('graphql-tools');
+const restDirective = require('../index');
 
-type Query {
-  me(gender: String): Me @rest(url: "https://randomuser.me/api/?gender=$gender", extractFromResponse: "results[0]")
-  users: [User] @rest(url: "https://api.github.com/users")
-  user(user: String): User @rest(url: "https://api.github.com/users/$user")
-}
+const GITHUB_URL = 'https://api.github.com';
+const USER_URL = 'https://randomuser.me/api';
+const ADMIN_URL = 'https://yesno.wtf/api';
+
+const typeDefs = `
+  type User {
+    login: String
+    avatar_url: String
+  }
+
+  type Me {
+    gender: String
+    email: String
+    admin: String @rest(url: "${ADMIN_URL}" extractFromResponse: "answer")
+  }
+
+  type Query {
+    me(gender: String): Me @rest(url: "${USER_URL}/?gender=$gender" extractFromResponse: "results[0]")
+    users: [User] @rest(url: "${GITHUB_URL}/users")
+    user(user: String): User @rest(url: "${GITHUB_URL}/users/$user")
+  }
+`;
+
+module.exports = makeExecutableSchema({
+  typeDefs,
+  schemaDirectives: {
+    rest: restDirective,
+  },
+});
 ```
 
-GraphQL queries:
+> Warning! Directive overwrites your resolvers if they're defined
+
+## Example queries:
 
 ```graphql
 query {
@@ -94,7 +166,7 @@ query($gender: String) {
 }
 ```
 
-## Directive Parameters
+# Directive Parameters
 
 Directive params:
 
@@ -136,7 +208,7 @@ For local development (and testing), all you have to do is to run `yarn` and the
 
 Run yarn test (try `--watch` flag) for unit tests (we are using Jest)
 
-## LICENSE
+# LICENSE
 
 The MIT License (MIT) 2018 - Luke Czyszczonik - <mailto:lukasz.czyszczonik@gmail.com>
 

@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getDirectiveDeclaration should be defined 1`] = `
+GraphQLDirective {
+  "args": Array [
+    Object {
+      "astNode": undefined,
+      "defaultValue": undefined,
+      "description": null,
+      "name": "url",
+      "type": "String",
+    },
+    Object {
+      "astNode": undefined,
+      "defaultValue": "",
+      "description": null,
+      "name": "extractFromResponse",
+      "type": "String",
+    },
+  ],
+  "astNode": undefined,
+  "description": undefined,
+  "locations": Array [
+    "FIELD_DEFINITION",
+  ],
+  "name": "rest",
+}
+`;
+
+exports[`if replace url params 1`] = `
+Object {
+  "data": Object {
+    "user": Object {
+      "avatar_url": "https://avatars0.example",
+      "login": "ejo",
+    },
+  },
+}
+`;
+
+exports[`if throw error 1`] = `
+Object {
+  "data": Object {
+    "user": Object {
+      "avatar_url": null,
+      "login": null,
+    },
+  },
+}
+`;
+
+exports[`path is return correct result and fillParametersFromArgs replace parameters in url 1`] = `
+Object {
+  "data": Object {
+    "me": Object {
+      "admin": "yes",
+      "email": "diana.marshall@example.com",
+      "gender": "female",
+    },
+  },
+}
+`;
+
+exports[`return plain response 1`] = `
+Object {
+  "data": Object {
+    "users": Array [
+      Object {
+        "avatar_url": "https://avatar.example",
+        "login": "ejo",
+      },
+      Object {
+        "avatar_url": "https://avatars0.example",
+        "login": "ajo",
+      },
+      Object {
+        "avatar_url": "https://avatars0.example",
+        "login": "bojo",
+      },
+    ],
+  },
+}
+`;

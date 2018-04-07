@@ -1,7 +1,7 @@
 const { graphql } = require('graphql');
 const nock = require('nock');
 const directive = require('../index');
-const schema = require('../example/schema');
+const schema = require('../example/schemaWithResolvers');
 
 beforeAll(() => {
   nock.disableNetConnect();
@@ -19,7 +19,7 @@ test('getDirectiveDeclaration should be defined', () => {
   expect(directive.getDirectiveDeclaration()).toMatchSnapshot();
 });
 
-test('path is return correct result and fillParametersFromArgs replace parameters in url', async () => {
+test('path is return correct result and fillParametersFromArgs replace parameters in url', () => {
   nock('https://yesno.wtf:443')
     .get('/api')
     .reply(200, { answer: 'yes' });
@@ -31,7 +31,7 @@ test('path is return correct result and fillParametersFromArgs replace parameter
       results: [{ gender: 'female', email: 'diana.marshall@example.com' }],
     });
 
-  const response = await graphql(
+  return graphql(
     schema,
     `
       query($gender: String) {
@@ -45,12 +45,12 @@ test('path is return correct result and fillParametersFromArgs replace parameter
     {},
     {},
     { gender: 'female' }
-  );
-
-  expect(response).toMatchSnapshot();
+  ).then(response => {
+    expect(response).toMatchSnapshot();
+  });
 });
 
-test('return plain response', async () => {
+test('return plain response', () => {
   nock('https://api.github.com:443', { encodedQueryParams: true })
     .get('/users')
     .reply(200, [
@@ -59,7 +59,7 @@ test('return plain response', async () => {
       { login: 'bojo', avatar_url: 'https://avatars0.example' },
     ]);
 
-  const response = await graphql(
+  return graphql(
     schema,
     `
       query {
@@ -69,12 +69,12 @@ test('return plain response', async () => {
         }
       }
     `
-  );
-
-  expect(response).toMatchSnapshot();
+  ).then(response => {
+    expect(response).toMatchSnapshot();
+  });
 });
 
-test('if replace url params', async () => {
+test('if replace url params', () => {
   nock('https://api.github.com:443', { encodedQueryParams: true })
     .get('/users/ejo')
     .reply(200, {
@@ -82,7 +82,7 @@ test('if replace url params', async () => {
       avatar_url: 'https://avatars0.example',
     });
 
-  const response = await graphql(
+  return graphql(
     schema,
     `
       query($user: String) {
@@ -95,7 +95,32 @@ test('if replace url params', async () => {
     {},
     {},
     { user: 'ejo' }
-  );
+  ).then(response => {
+    expect(response).toMatchSnapshot();
+  });
+});
 
-  expect(response).toMatchSnapshot();
+test('if throw error', () => {
+  nock('https://api.github.com:443', { encodedQueryParams: true })
+    .get('/users/ejo')
+    .reply(404, {
+      message: 'Not Found',
+    });
+
+  return graphql(
+    schema,
+    `
+      query($user: String) {
+        user(user: $user) {
+          login
+          avatar_url
+        }
+      }
+    `,
+    {},
+    {},
+    { user: 'ejo' }
+  ).then(response => {
+    expect(response).toMatchSnapshot();
+  });
 });
