@@ -38,6 +38,17 @@ Object {
 }
 `;
 
+exports[`if throw error 1`] = `
+Object {
+  "data": Object {
+    "user": Object {
+      "avatar_url": null,
+      "login": null,
+    },
+  },
+}
+`;
+
 exports[`path is return correct result and fillParametersFromArgs replace parameters in url 1`] = `
 Object {
   "data": Object {

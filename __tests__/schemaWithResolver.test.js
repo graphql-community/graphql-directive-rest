@@ -99,3 +99,28 @@ test('if replace url params', () => {
     expect(response).toMatchSnapshot();
   });
 });
+
+test('if throw error', () => {
+  nock('https://api.github.com:443', { encodedQueryParams: true })
+    .get('/users/ejo')
+    .reply(404, {
+      message: 'Not Found',
+    });
+
+  return graphql(
+    schema,
+    `
+      query($user: String) {
+        user(user: $user) {
+          login
+          avatar_url
+        }
+      }
+    `,
+    {},
+    {},
+    { user: 'ejo' }
+  ).then(response => {
+    expect(response).toMatchSnapshot();
+  });
+});
