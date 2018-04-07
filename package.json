@@ -1,6 +1,6 @@
 {
   "name": "graphql-directive-rest",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "GraphQL directive for easy integration with REST API",
   "main": "index.js",
   "repository": "git@github.com:graphql-community/graphql-directive-rest.git",
