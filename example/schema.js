@@ -3,7 +3,7 @@ const restDirective = require('../index');
 
 const GITHUB_URL = 'https://api.github.com';
 const USER_URL = 'https://randomuser.me/api';
-const ADMIN_URL = 'https://yesno.wtf';
+const ADMIN_URL = 'https://yesno.wtf/api';
 
 const typeDefs = `
   type User {
@@ -14,7 +14,7 @@ const typeDefs = `
   type Me {
     gender: String
     email: String
-    admin: String @rest(url: "${ADMIN_URL}/api" extractFromResponse: "answer")
+    admin: String @rest(url: "${ADMIN_URL}" extractFromResponse: "answer")
   }
 
   type Query {
