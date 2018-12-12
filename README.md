@@ -82,17 +82,6 @@ module.exports = makeExecutableSchema({
     rest: restDirective,
   },
 });
-
-`;
-
-const resolvers
-
-module.exports = makeExecutableSchema({
-  typeDefs,
-  schemaDirectives: {
-    rest: restDirective,
-  },
-});
 ```
 
 ## Using `@rest` directive
